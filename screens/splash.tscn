@@ -81,18 +81,16 @@ script = ExtResource( 1 )
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 1024.0
-margin_bottom = 600.0
+margin_right = 128.0
+margin_bottom = 128.0
 color = Color( 0, 0, 0, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Rakso" type="Sprite" parent="."]
-position = Vector2( 512, 296 )
+position = Vector2( 64, 64 )
+scale = Vector2( 0.28, 0.28 )
 texture = ExtResource( 4 )
-vframes = 4
 hframes = 11
+vframes = 4
 frame = 22
 
 [node name="RaksoAnimationPlayer" type="AnimationPlayer" parent="."]
