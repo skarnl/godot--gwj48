@@ -1,0 +1,40 @@
+
+on:
+  release:
+    types: [created, edited]
+
+
+env:
+  PROJECT_NAME: gwj48
+  ITCH_GAME: gwj48
+  ITCH_USER: skar
+
+
+jobs:
+  release:
+    strategy:
+      matrix:
+        platform: [html5, windows, osx, linux]
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: download ${{ matrix.platform }} release
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          file: ${{ env.PROJECT_NAME }}--${{ matrix.platform }}.zip
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      
+      - uses: olegtarasov/get-tag@v2.1
+        id: tagName
+
+      - name: push ${{ matrix.platform }} release to itch.io
+        uses: josephbmanley/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+          CHANNEL: ${{ matrix.platform }}
+          ITCH_GAME: ${{ env.ITCH_GAME }}
+          ITCH_USER: ${{ env.ITCH_USER }}
+          PACKAGE: ${{ env.PROJECT_NAME }}--${{ matrix.platform }}.zip
+          VERSION: ${{ steps.tagName.outputs.tag }}
+
