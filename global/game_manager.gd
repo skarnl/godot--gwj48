@@ -19,10 +19,6 @@ enum GameState {
 	GAME_OVER
 }
 
-const BASE_LEVELS_PATH = 'res://game/'
-var current_level = -1
-var levels = ['level1.tscn', 'level2.tscn']
-
 var _current_state: int = GameState.SPLASH setget _set_current_state
 var _previous_state: int
 
@@ -34,17 +30,6 @@ func _ready():
 func start_game():
 	transition_to(GameState.GAME)
 	
-	
-func goto_next_level():
-	current_level += 1
-	
-	print('current_level = ', current_level)
-	
-	if current_level < levels.size():
-		# TODO: some kind of screen transition / animation
-		SceneLoader.goto_scene(BASE_LEVELS_PATH + levels[current_level])
-	else:
-		emit_signal('victory')
 	
 	
 func game_over():
@@ -61,29 +46,13 @@ func transition_to(new_state: int) -> void:
 		GameState.GAME:
 			if _current_state in {GameState.MAIN_MENU: true, GameState.SPLASH: true, GameState.GAME: true, GameState.GAME_OVER: true}:
 				_current_state = new_state
-				goto_next_level()
+				
+				SceneLoader.goto_scene(Screens.GAME)
 		
 		GameState.GAME_OVER:
 			if _current_state in {GameState.GAME: true}:
 				_current_state = new_state
 				SceneLoader.goto_scene(Screens.GAME_OVER)
-
-
-# pause handler
-func _input(event):
-	if event is InputEventKey:
-		if event.is_action_pressed('restart'):
-			#hack so we restart the current level ^^
-			current_level = clamp(current_level - 1, -1, levels.size())
-			
-			transition_to(GameState.GAME)
-		elif event.is_action_pressed('pause'):
-			match _current_state:
-				GameState.GAME:
-					transition_to(GameState.PAUSED)
-			
-				GameState.PAUSED:
-					transition_to(GameState.GAME)
 
 
 func _set_current_state(new_state:int) -> void:

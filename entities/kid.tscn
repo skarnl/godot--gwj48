@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/images/moonr/kid--busted.png" type="Texture" id=1]
+[ext_resource path="res://assets/images/moonr/kid--mooning.png" type="Texture" id=2]
+[ext_resource path="res://assets/images/moonr/kid--idle.png" type="Texture" id=3]
+[ext_resource path="res://entities/kid.gd" type="Script" id=4]
+
+[node name="Kid" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="Kid--idle" type="Sprite" parent="."]
+position = Vector2( 640, 640 )
+texture = ExtResource( 3 )
+
+[node name="Kid--mooning" type="Sprite" parent="."]
+position = Vector2( 640, 640 )
+texture = ExtResource( 2 )
+
+[node name="Kid--busted" type="Sprite" parent="."]
+position = Vector2( 640, 640 )
+texture = ExtResource( 1 )
