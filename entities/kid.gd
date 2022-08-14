@@ -1,37 +1,30 @@
 extends Node2D
 
-enum STATES {
-	IDLE,
-	MOONING,
-	BUSTED
-}
+signal mooning_stopped
 
-var state = STATES.IDLE
+onready var vis := $VisualContainer
 
-onready var idle = $"Kid--idle"
-onready var mooning = $"Kid--mooning"
-onready var busted = $"Kid--busted"
+const STOP_MOONING_TIMEOUT1 := 0.15
+const STOP_MOONING_TIMEOUT2 := 0.1
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	update_state()
-	
-	
-func _hide_all() -> void:
-	idle.hide()
-	mooning.hide()
-	busted.hide()
 
+func idle() -> void:
+	vis.show_state("idle")
+
+
+func start_mooning() -> void:
+	vis.show_state("mooning")
+
+
+func stop_mooning() -> void:
+	vis.show_state("stop-mooning1")
 	
-func update_state() -> void:
-	_hide_all()
+	yield(get_tree().create_timer(STOP_MOONING_TIMEOUT1), "timeout")
 	
-	match state:
-		STATES.IDLE:
-			idle.show()
-			
-		STATES.MOONING:
-			mooning.show()
-			
-		STATES.BUSTED:
-			busted.show()
+	vis.show_state("stop-mooning2")
+	
+	yield(get_tree().create_timer(STOP_MOONING_TIMEOUT2), "timeout")
+
+	vis.show_state("idle")
+	
+	emit_signal("mooning_stopped")
