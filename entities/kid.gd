@@ -17,14 +17,16 @@ func start_mooning() -> void:
 
 
 func stop_mooning() -> void:
-	vis.show_state("stop-mooning1")
+	vis.show_sequence([
+		["stop-mooning1", STOP_MOONING_TIMEOUT1],
+		["stop-mooning2", STOP_MOONING_TIMEOUT2],
+		["idle"]
+	])
 	
-	yield(get_tree().create_timer(STOP_MOONING_TIMEOUT1), "timeout")
-	
-	vis.show_state("stop-mooning2")
-	
-	yield(get_tree().create_timer(STOP_MOONING_TIMEOUT2), "timeout")
-
-	vis.show_state("idle")
+	yield(vis, "sequence_ended")
 	
 	emit_signal("mooning_stopped")
+
+
+func busted() -> void:
+	vis.show_state("busted")

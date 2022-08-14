@@ -37,6 +37,7 @@ func _on_Mother_looking() -> void:
 	if state == MOONING:
 		print("BUSTED")
 		_update_state(BUSTED)
+		return
 	elif state == STOP_MOONING:
 		print("increase paranoia")
 		# PARA increase
@@ -66,6 +67,12 @@ func _update_state(new_state: int) -> void:
 				
 			BUSTED:
 				kid.busted()
+				mom.busted()
+				
+				yield(mom, "busted_sequence_ended")
+				
+				_update_state(GAME_OVER)
+								
 				
 			GAME_OVER:
 				print("GAME OVER")

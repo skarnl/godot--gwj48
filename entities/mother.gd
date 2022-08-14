@@ -2,10 +2,15 @@ extends Node2D
 
 signal update_looking_time
 signal looking_started
+signal busted_sequence_ended
 
+const TURNING_TIMEOUT1 := 0.2
+const TURNING_TIMEOUT2 := 0.1
+const TURNING_BACK_TIMEOUT1 := 0.1
+const TURNING_BACK_TIMEOUT2 := 0.07
+const SHOCKED_TIMEOUT := 2
 
 var STATE_TRANSLATIONS = ['idle', 'looking', 'shocked', 'angry', 'turning', 'smile', 'para']
-
 
 enum {
 	IDLE,
@@ -21,7 +26,7 @@ onready var vis := $VisualContainer
 
 var state = IDLE
 
-onready var timer = $Timer
+onready var timer := $Timer
 
 var paranoia := 0.0
 
@@ -31,15 +36,17 @@ var rdm := RandomNumberGenerator.new()
 func _ready() -> void:
 	rdm.randomize()
 	
-	update_state(IDLE)
-	
+	timer.set_one_shot(true)
 	timer.connect("timeout", self, "_on_timer_timeout")
 	
+	idle()	
 	
 	
 func update_state(new_state: int) -> void:
 	if state == ANGRY:
 		return
+		
+	state = new_state
 		
 	vis.show_state(STATE_TRANSLATIONS[state])
 
@@ -47,32 +54,68 @@ func update_state(new_state: int) -> void:
 func idle() -> void:
 	update_state(IDLE)
 	
-	# dit moet gebaseerd zijn op hoe paranoid ze is
-	timer.wait_time = rdm.randi_range(10, 20)
+	var wait_time = rdm.randf_range(2.1, 4.5)
+	
+	print("wait time = %d" % wait_time)
+	
+	# TODO dit moet gebaseerd zijn op hoe paranoid ze is
+	timer.start(wait_time)
 
 
 func busted() -> void:
-	update_state(SHOCKED)
+	timer.stop()
 	
-	# wait 1 sec
-	yield(get_tree().create_timer(1.0), "timeout")
+	vis.show_sequence([
+		["shocked", SHOCKED_TIMEOUT],
+		["angry"]
+	])
 	
-	update_state(ANGRY)
+	yield(vis, "sequence_ended")
+	
+	emit_signal("busted_sequence_ended")
 	
 	
 func start_looking() -> void:
-	pass
+	vis.show_sequence([
+		["turning1", TURNING_TIMEOUT1],
+		["turning2", TURNING_TIMEOUT2],
+		["looking", 0.3]
+	])
+	
+	yield(vis, "sequence_ended")
+	
+	emit_signal("looking_started")
+	
+func stop_looking() -> void:
+	vis.show_sequence([
+		["turning2", TURNING_BACK_TIMEOUT1],
+		["turning1", TURNING_BACK_TIMEOUT2],
+		["idle"]
+	])
+	
+	yield(vis, "sequence_ended")
+	
+	idle()
 
 
 func _on_timer_timeout() -> void:
-	timer.stop()
+	# timer.stop()
+	print("_on_timer_timeout")
+	print(state)
+
 	
-	start_looking()
+	match state:
+		IDLE:
+			start_looking()
+			
+		SMILE:
+			stop_looking()
 
 
 func show_smile() -> void:
-	vis.show_state("smile")
-
+	update_state(SMILE)
+	
+	timer.start(3)
 
 func show_para() -> void:
 	vis.show_state("para1")
