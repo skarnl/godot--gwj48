@@ -42,8 +42,14 @@ jobs:
         godot_export_templates_download_url: https://github.com/godotengine/godot/releases/download/${{ env.GODOT_VERSION }}-stable/Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz
         relative_project_path: ${{ env.GAME_PATH }}
         archive_output: true
-        base_version: ${{ steps.tag_version.outputs.TAG_VERSION}}
       env:
         GITHUB_TOKEN: ${{ secrets.EXPORT_GITHUB_TOKEN }}
 
+    - name: create release
+        uses: softprops/action-gh-release@v0.1.14
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          generate_release_notes: true
+          tag_name: ${{ steps.tag_version.outputs.TAG_VERSION }}
+          files: ${{ steps.export.outputs.archive_directory }}/*
 
