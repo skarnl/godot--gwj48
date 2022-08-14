@@ -81,13 +81,13 @@ script = ExtResource( 1 )
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 128.0
-margin_bottom = 128.0
+margin_right = 1280.0
+margin_bottom = 1280.0
 color = Color( 0, 0, 0, 1 )
 
 [node name="Rakso" type="Sprite" parent="."]
-position = Vector2( 64, 64 )
-scale = Vector2( 0.28, 0.28 )
+position = Vector2( 640, 640 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 4 )
 hframes = 11
 vframes = 4
