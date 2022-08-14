@@ -1,5 +1,7 @@
 extends Node2D
 
+signal update_player_height
+
 var TilePrefab = preload("res://entities/tile.tscn")
 
 var TILE_WIDTH := 16
@@ -9,7 +11,11 @@ var SCREEN_WIDTH_IN_TILES := 8
 export var speed := 20.0
 export var increase_rate := 1.0
 
+var last_update_time := 0.0
+
 var current_tile_index := 0
+
+var center_tile;
 
 var tileConfig = {
 	
@@ -30,20 +36,24 @@ func start() -> void:
 
 
 func _process(delta: float) -> void:
-	position.x -= delta * speed
+	tile_container.position.x -= delta * speed
 	
-	speed += increase_rate / 100.0
+	#speed += increase_rate / 100.0
 	
-	print (speed)
+	last_update_time += delta
 	
+	if last_update_time > 0.5:
+		last_update_time = 0
+		emit_signal("update_player_height")
+
 
 func _initial_generation() -> void:
 	for _i in range(SCREEN_WIDTH_IN_TILES * 2):
-		generate_next()
+		_generate_next()
 		
 		
 # Generate the next part
-func generate_next() -> void:
+func _generate_next() -> void:
 	var next_tile_index = _determine_tile_index()
 	
 	var t = TilePrefab.instance()
@@ -59,17 +69,36 @@ func generate_next() -> void:
 	
 	current_tile_index += 1
 	
+	
 func _on_tile_removed() -> void:
-	print("tile removed, add new one")
-	generate_next()
+	_generate_next()
 
 
 func _determine_tile_index() -> int:
 	var TEMP_fixed_tile_order = [
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 2, 0, 0
+		0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0
 	]
-	
-	print ("new index = " + str(current_tile_index % TEMP_fixed_tile_order.size()))
 	
 	# TODO eventually make this a random selection based on the current_tile_index
 	return TEMP_fixed_tile_order[current_tile_index % TEMP_fixed_tile_order.size()]
+
+
+func get_offset(xpos: float) -> float:
+	var center_tile = tile_container.get_child(5)
+	
+	print(center_tile)
+	
+	print(center_tile.frame)
+	
+	match center_tile.frame:
+		[0, 1, 2]:
+			return 10.0
+		
+		[4, 6, 7]:
+			return 8.0
+			
+		[3, 5, 8, 9]:
+			# TODO fix slope
+			return 4.0
+
+	return 20.0
