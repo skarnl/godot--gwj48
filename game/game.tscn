@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/images/moonr/car.png" type="Texture" id=1]
 [ext_resource path="res://game/game.gd" type="Script" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://assets/images/moonr/father-still.png" type="Texture" id=4]
 [ext_resource path="res://entities/kid.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/mother.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/images/moonr/seats.png" type="Texture" id=7]
+[ext_resource path="res://assets/images/moonr/hand.png" type="Texture" id=8]
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 2 )
@@ -15,11 +17,28 @@ script = ExtResource( 2 )
 [node name="Car" type="Sprite" parent="."]
 position = Vector2( 640, 640 )
 texture = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Father-still" type="Sprite" parent="."]
 position = Vector2( 640, 640 )
 texture = ExtResource( 4 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Mother" parent="." instance=ExtResource( 6 )]
+
+[node name="Seats" type="Sprite" parent="."]
+position = Vector2( 640, 640 )
+texture = ExtResource( 7 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Hand" type="Sprite" parent="."]
+position = Vector2( 640, 640 )
+texture = ExtResource( 8 )
 
 [node name="Kid" parent="." instance=ExtResource( 5 )]

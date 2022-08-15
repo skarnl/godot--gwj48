@@ -32,5 +32,8 @@ func show_sequence(states: Array) -> void:
 		
 		if state.size() > 1:
 			yield(get_tree().create_timer(state[1]), "timeout")
+			
+		if state.size() > 2:
+			emit_signal(state[2])
 
 	emit_signal("sequence_ended")

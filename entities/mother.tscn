@@ -22,42 +22,52 @@ script = ExtResource( 5 )
 prefix = "Mother"
 
 [node name="Mother--idle" type="Sprite" parent="VisualContainer"]
+visible = false
 position = Vector2( 640, 640 )
 texture = ExtResource( 2 )
 
 [node name="Mother--looking" type="Sprite" parent="VisualContainer"]
+visible = false
 position = Vector2( 640, 640 )
 texture = ExtResource( 1 )
 
 [node name="Mother--shocked" type="Sprite" parent="VisualContainer"]
+visible = false
 position = Vector2( 640, 640 )
 texture = ExtResource( 3 )
 
 [node name="Mother--angry" type="Sprite" parent="VisualContainer"]
+visible = false
 position = Vector2( 640, 640 )
 texture = ExtResource( 4 )
 
 [node name="Mother--turning1" type="Sprite" parent="VisualContainer"]
+visible = false
 position = Vector2( 640, 640 )
 texture = ExtResource( 8 )
 
 [node name="Mother--turning2" type="Sprite" parent="VisualContainer"]
+visible = false
 position = Vector2( 640, 640 )
 texture = ExtResource( 6 )
 
 [node name="Mother--smile" type="Sprite" parent="VisualContainer"]
+visible = false
 position = Vector2( 640, 640 )
 texture = ExtResource( 10 )
 
 [node name="Mother--para1" type="Sprite" parent="VisualContainer"]
+visible = false
 position = Vector2( 640, 640 )
 texture = ExtResource( 11 )
 
 [node name="Mother--para2" type="Sprite" parent="VisualContainer"]
+visible = false
 position = Vector2( 640, 640 )
 texture = ExtResource( 9 )
 
 [node name="Mother--para3" type="Sprite" parent="VisualContainer"]
+visible = false
 position = Vector2( 640, 640 )
 texture = ExtResource( 7 )
 
