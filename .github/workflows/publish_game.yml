@@ -5,8 +5,8 @@ on:
 
 
 env:
-  PROJECT_NAME: gwj48
-  ITCH_GAME: gwj48
+  PROJECT_NAME: moonr
+  ITCH_GAME: moonr
   ITCH_USER: skar
 
 
