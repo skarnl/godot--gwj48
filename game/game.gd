@@ -17,7 +17,6 @@ var mom_is_looking := false
 
 var state = IDLE
 
-
 func _ready() -> void:
 	kid.connect("mooning_stopped", self, "_on_Kid_mooning_stopped")
 	mom.connect("show_hand", self, "_on_show_hand")
@@ -37,16 +36,20 @@ func _on_hide_hand() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_accept") and state == IDLE:
-		_update_state(MOONING)
-		
-		if mom_is_looking:
-			yield(get_tree().create_timer(1.0), "timeout")
-			
-			_update_state(BUSTED)
-		
-	elif event.is_action_released("ui_accept") and state == MOONING:
-		_update_state(STOP_MOONING)
+	match state:
+		IDLE:
+			if event.is_action_pressed("ui_accept") or (event is InputEventScreenTouch and event.is_pressed()):
+				_update_state(MOONING)
+				
+				if mom_is_looking:
+					yield(get_tree().create_timer(1.0), "timeout")
+					
+					_update_state(BUSTED)
+		MOONING:
+			if event.is_action_released("ui_accept") or (event is InputEventScreenTouch and not event.is_pressed()):
+				
+				
+				_update_state(STOP_MOONING)
 		
 
 func _on_Kid_mooning_stopped() -> void:

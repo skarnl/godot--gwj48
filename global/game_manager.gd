@@ -23,10 +23,7 @@ var _current_state: int = GameState.SPLASH setget _set_current_state
 var _previous_state: int
 
 
-func _ready():
-	pause_mode = Node.PAUSE_MODE_PROCESS
-	
-	
+
 func start_game():
 	transition_to(GameState.GAME)
 	
@@ -58,3 +55,12 @@ func transition_to(new_state: int) -> void:
 func _set_current_state(new_state:int) -> void:
 	_previous_state = _current_state
 	_current_state = new_state
+
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed('ui_restart'):
+		_restart()
+
+func _restart() -> void:
+	print("RESTART")
+	SceneLoader.goto_scene(Screens.GAME)
