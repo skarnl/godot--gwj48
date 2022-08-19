@@ -5,6 +5,8 @@ onready var kid := $Kid
 onready var mom := $Mother
 onready var hand := $Hand
 onready var hud := $HUD
+onready var score := $ScoreManager
+
 
 enum {
 	IDLE,
@@ -19,7 +21,10 @@ var mom_is_looking := false
 var state = IDLE
 
 func _ready() -> void:
+	kid.connect("mooning_started", self, "_on_Kid_mooning_started")
 	kid.connect("mooning_stopped", self, "_on_Kid_mooning_stopped")
+	kid.connect("mooning_stop__anim_finished", self, "_on_Kid_mooning_stop__anim_finished")
+	
 	mom.connect("show_hand", self, "_on_show_hand")
 	mom.connect("hide_hand", self, "_on_hide_hand")
 	mom.connect("looking_started", self, "_on_Mother_looking_started")
@@ -52,10 +57,20 @@ func _input(event: InputEvent) -> void:
 		GAME_OVER:
 			if event.is_pressed():
 				_restart()
-		
+
+func _on_Kid_mooning_started() -> void:
+	if state == MOONING:
+		score.start_counting()
+
 
 func _on_Kid_mooning_stopped() -> void:
+	score.stop_counting()
+	
+
+# animation is finished, so now we can be idle
+func _on_Kid_mooning_stop__anim_finished() -> void:
 	_update_state(IDLE)
+	
 
 
 func _on_Mother_looking_started() -> void:
@@ -98,6 +113,7 @@ func _update_state(new_state: int) -> void:
 			kid.start_mooning()
 			
 		BUSTED:
+			score.stop_counting()
 			kid.busted()
 			mom.busted()
 			
@@ -121,6 +137,8 @@ func _restart() -> void:
 	mom.reset()
 	hud.reset()
 	hand.hide()
+	score.reset()
+	
 	mom_is_looking = false
 	
 	_update_state(IDLE)

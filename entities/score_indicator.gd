@@ -8,7 +8,12 @@ func _ready() -> void:
 
 
 func show_value(val: int) -> void:
-	label.text = str(val)
+	yield(self, "ready")
+	
+	print("ADD " + str(val))
+	print(val)
+	
+	label.set_text("+%d" % val)
 	
 	show()
 	

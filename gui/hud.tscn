@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/fonts/Mojo.tres" type="DynamicFont" id=1]
 [ext_resource path="res://gui/hud.gd" type="Script" id=2]
+[ext_resource path="res://gui/animated_score.gd" type="Script" id=3]
 
 [sub_resource type="DynamicFontData" id=1]
 font_path = "res://assets/fonts/Mojo font.ttf"
@@ -21,7 +22,7 @@ script = ExtResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="Score" type="Label" parent="HUD"]
+[node name="AnimatedScore" type="Label" parent="HUD"]
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -34,6 +35,7 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = ExtResource( 1 )
 text = "0"
 align = 1
+script = ExtResource( 3 )
 
 [node name="Explanation" type="Label" parent="HUD"]
 anchor_left = 0.5
@@ -50,6 +52,7 @@ text = "PRESS 'SPACE' TO MOON"
 align = 1
 
 [node name="GameOver" type="ColorRect" parent="HUD"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0.862745, 0.862745, 0.862745, 0.658824 )

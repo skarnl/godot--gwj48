@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://assets/images/moonr/car.png" type="Texture" id=1]
 [ext_resource path="res://game/game.gd" type="Script" id=2]
@@ -8,7 +8,6 @@
 [ext_resource path="res://entities/mother.tscn" type="PackedScene" id=6]
 [ext_resource path="res://assets/images/moonr/seats.png" type="Texture" id=7]
 [ext_resource path="res://assets/images/moonr/hand.png" type="Texture" id=8]
-[ext_resource path="res://game/score_manager.gd" type="Script" id=9]
 [ext_resource path="res://game/score_manager.tscn" type="PackedScene" id=10]
 
 [node name="Game" type="Node2D"]
@@ -46,4 +45,3 @@ texture = ExtResource( 8 )
 [node name="Kid" parent="." instance=ExtResource( 5 )]
 
 [node name="ScoreManager" parent="." instance=ExtResource( 10 )]
-script = ExtResource( 9 )
