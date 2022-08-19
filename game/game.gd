@@ -21,13 +21,20 @@ var mom_is_looking := false
 var state = IDLE
 
 func _ready() -> void:
+# warning-ignore:return_value_discarded
 	kid.connect("mooning_started", self, "_on_Kid_mooning_started")
+# warning-ignore:return_value_discarded
 	kid.connect("mooning_stopped", self, "_on_Kid_mooning_stopped")
+# warning-ignore:return_value_discarded
 	kid.connect("mooning_stop__anim_finished", self, "_on_Kid_mooning_stop__anim_finished")
 	
+# warning-ignore:return_value_discarded
 	mom.connect("show_hand", self, "_on_show_hand")
+# warning-ignore:return_value_discarded
 	mom.connect("hide_hand", self, "_on_hide_hand")
+# warning-ignore:return_value_discarded
 	mom.connect("looking_started", self, "_on_Mother_looking_started")
+# warning-ignore:return_value_discarded
 	mom.connect("looking_stopped", self, "_on_Mother_looking_stopped")
 	
 	hand.hide()
@@ -76,20 +83,16 @@ func _on_Kid_mooning_stop__anim_finished() -> void:
 func _on_Mother_looking_started() -> void:
 	mom_is_looking = true
 	
-	if state == MOONING:
-		_update_state(BUSTED)
-		return
-	elif state == STOP_MOONING:
-		print("increase paranoia")
-		# PARA increase
-		mom.show_para()
-	
-	var para_level = 0;	
-	if para_level > 0:
-		mom.show_para()
-	else:
-		mom.show_smile()
-	
+	match state:
+		MOONING:
+			_update_state(BUSTED)
+		
+		STOP_MOONING:
+			mom.show_para()
+		
+		_:
+			mom.show_smile()
+			
 
 func _on_Mother_looking_stopped() -> void:
 	mom_is_looking = false
@@ -125,9 +128,6 @@ func _update_state(new_state: int) -> void:
 			
 		GAME_OVER:
 			hud.show_game_over()
-			# show points
-			
-			# timeout before we can proceed?
 			
 
 func _restart() -> void:

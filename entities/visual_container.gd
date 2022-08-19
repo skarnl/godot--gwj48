@@ -26,8 +26,6 @@ func _show_state(state_name: String) -> void:
 	
 	assert(has_node(node_name), "no node found with name: " + node_name) 
 	
-	print("show_state [%s]" % node_name)
-	
 	hide_all()
 	
 	get_node(node_name).show()

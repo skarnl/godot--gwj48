@@ -7,13 +7,16 @@ onready var anchor := $ScoreIndicationAnchor
 const TICK_RATE := 0.35
 var current_tick := 0.0
 
-export var current_score := 0.0
-export var increase_with := 1.0
-export var increase_ratio := 1.5
+const INCREASE_WITH_START_VALUE := 1.0
+const INCREASE_RATIO_START_VALUE := 1.473
+	
+
+export var increase_with := INCREASE_WITH_START_VALUE
+export var increase_ratio := INCREASE_RATIO_START_VALUE
+
+var total_score := 0
 
 func _ready() -> void:
-	print("SM started")
-	
 	reset()
 	
 	
@@ -25,23 +28,22 @@ func _process(delta: float) -> void:
 		_update_score(delta)
 
 
-func _update_score(delta: float = 0) -> void:
-	var increase_value = floor(increase_with * increase_ratio)
-	current_score = current_score + increase_value
-	increase_ratio = increase_ratio + delta
+func _update_score(delta: float) -> void:
+	increase_with = increase_with * increase_ratio
 	
-	print("increase_ratio %d" % increase_ratio)
+	var rounded_increase_value = round(increase_with)
 	
-	print("increase_value %d" % increase_value)
+	add_score(rounded_increase_value)
 	
-	add_score(increase_value)
+	total_score = total_score + rounded_increase_value
 	
-	EventBus.emit_signal("score_updated", increase_value)
-
 
 # start mooning
 func start_counting() -> void:
 	current_tick = 0
+	increase_with = INCREASE_WITH_START_VALUE
+	increase_ratio = INCREASE_RATIO_START_VALUE
+	
 	set_process(true)
 	
 	
@@ -49,7 +51,8 @@ func start_counting() -> void:
 func stop_counting() -> void:
 	if is_processing():
 		# we need to make the last mooning-action also count for points ^^
-		_update_score()
+#		_update_score()
+		pass
 		
 	set_process(false)
 
@@ -57,15 +60,21 @@ func stop_counting() -> void:
 func add_score(val: int) -> void:
 	var sc = ScoreIndicatorPrefab.instance()
 	sc.show_value(val)
+	sc.connect("update_score", self, "_on_update_score")
 
 	anchor.add_child(sc)
 
 
+func _on_update_score() -> void:
+	EventBus.emit_signal("score_updated", total_score)
+
+
 func reset() -> void:
 	set_process(false)
-	current_score = 0
-	increase_with = 1.0
-	increase_ratio = 1.1
+	current_tick = 0
+	increase_with = INCREASE_WITH_START_VALUE
+	increase_ratio = INCREASE_RATIO_START_VALUE
+	total_score = 0
 	
 	for c in anchor.get_children():
 		c.queue_free()

@@ -1,7 +1,11 @@
 extends Node2D
 
-onready var label: Label = $Label
-onready var player: AnimationPlayer = $AnimationPlayer
+signal update_score
+
+onready var label: Label = $LabelContainer/Label
+onready var player: AnimationPlayer = $LabelContainer/AnimationPlayer
+
+var value: int
 
 func _ready() -> void:
 	hide()
@@ -10,8 +14,7 @@ func _ready() -> void:
 func show_value(val: int) -> void:
 	yield(self, "ready")
 	
-	print("ADD " + str(val))
-	print(val)
+	value = val
 	
 	label.set_text("+%d" % val)
 	
@@ -22,3 +25,7 @@ func show_value(val: int) -> void:
 	yield(player, "animation_finished")
 	
 	queue_free()
+
+
+func t_on_update_score() -> void:
+	emit_signal("update_score")	

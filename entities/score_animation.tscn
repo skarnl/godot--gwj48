@@ -1,11 +1,18 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://entities/score_indicator.gd" type="Script" id=1]
 
-[sub_resource type="Animation" id=1]
+[sub_resource type="DynamicFontData" id=1]
+font_path = "res://assets/fonts/Mojo font.ttf"
+
+[sub_resource type="DynamicFont" id=4]
+size = 70
+font_data = SubResource( 1 )
+
+[sub_resource type="Animation" id=3]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath("Label:rect_position")
+tracks/0/path = NodePath("LabelContainer/Label:rect_position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -14,39 +21,27 @@ tracks/0/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( 0, 0 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Label:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
+"values": [ Vector2( -124.5, -44 ) ]
 }
 
 [sub_resource type="Animation" id=2]
 resource_name = "fade"
 tracks/0/type = "value"
-tracks/0/path = NodePath("Label:rect_position")
+tracks/0/path = NodePath("LabelContainer/Label:rect_position")
 tracks/0/interp = 1
-tracks/0/loop_wrap = true
+tracks/0/loop_wrap = false
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
 "times": PoolRealArray( 0, 0.9 ),
 "transitions": PoolRealArray( 0.535887, 0.535887 ),
 "update": 0,
-"values": [ Vector2( 0, 0 ), Vector2( 0, -682 ) ]
+"values": [ Vector2( -503, -78 ), Vector2( -503, -293 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("Label:modulate")
+tracks/1/path = NodePath("LabelContainer/Label:modulate")
 tracks/1/interp = 1
-tracks/1/loop_wrap = true
+tracks/1/loop_wrap = false
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
@@ -55,18 +50,43 @@ tracks/1/keys = {
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.2 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "t_on_update_score"
+} ]
+}
 
 [node name="ScoreIndicator" type="Node2D"]
 script = ExtResource( 1 )
 
-[node name="Label" type="Label" parent="."]
-margin_right = 249.0
-margin_bottom = 88.0
+[node name="LabelContainer" type="Node2D" parent="."]
+
+[node name="Label" type="Label" parent="LabelContainer"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -503.0
+margin_top = -78.0
+margin_right = -50.0
+margin_bottom = 78.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "+1"
+custom_fonts/font = SubResource( 4 )
+text = "+9999"
 align = 2
 valign = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/RESET = SubResource( 1 )
+[node name="AnimationPlayer" type="AnimationPlayer" parent="LabelContainer"]
+root_node = NodePath("../..")
+reset_on_save = false
+anims/RESET = SubResource( 3 )
 anims/fade = SubResource( 2 )

@@ -45,3 +45,4 @@ texture = ExtResource( 8 )
 [node name="Kid" parent="." instance=ExtResource( 5 )]
 
 [node name="ScoreManager" parent="." instance=ExtResource( 10 )]
+position = Vector2( 1229, 1104 )
