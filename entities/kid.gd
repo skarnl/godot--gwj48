@@ -12,12 +12,24 @@ const STOP_MOONING_TIMEOUT2 := 0.1
 var mooning_anim_finished := false
 var stop_mooning_after_anim := false
 
+var busted := false
+
+
+func _ready() -> void:
+	reset()
+
 
 func idle() -> void:
+	if busted:
+		return
+		
 	vis.show_state("idle")
 
 
 func start_mooning() -> void:
+	if busted:
+		return
+		
 	vis.show_sequence([
 		["stop-mooning2", START_MOONING_TIMEOUT1],
 		["mooning"]
@@ -32,6 +44,9 @@ func start_mooning() -> void:
 
 
 func stop_mooning() -> void:
+	if busted:
+		return
+	
 	if not mooning_anim_finished:
 		stop_mooning_after_anim = true
 		return
@@ -50,4 +65,13 @@ func stop_mooning() -> void:
 
 
 func busted() -> void:
+	busted = true
 	vis.show_state("busted")
+	
+
+
+func reset() -> void:
+	print("Kid::reset")
+	mooning_anim_finished = false
+	stop_mooning_after_anim = false
+	busted = false

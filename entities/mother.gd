@@ -12,10 +12,11 @@ const TURNING_TIMEOUT1 := 0.2
 const TURNING_TIMEOUT2 := 0.1
 const TURNING_BACK_TIMEOUT1 := 0.1
 const TURNING_BACK_TIMEOUT2 := 0.07
-const SHOCKED_TIMEOUT := 2
+const SHOCKED_TIMEOUT := 1.3
 
 const STATE_TRANSLATIONS = ['idle', 'looking', 'shocked', 'angry', 'turning', 'smile', 'para']
-const LOOK_CHANCE_START_PERCENTAGE = 48
+const LOOK_CHANCE_INITIAL_PERCENTAGE = 100
+const LOOK_CHANCE_BASE_PERCENTAGE = 48
 const LOOK_CHANCE_INCREASE_PERCENTAGE = 9
 
 enum {
@@ -34,7 +35,7 @@ var state = IDLE
 
 onready var timer := $Timer
 
-var look_chance_percentage := 100
+var look_chance_percentage := LOOK_CHANCE_INITIAL_PERCENTAGE
 
 var paranoia := 0.0
 
@@ -85,7 +86,7 @@ func busted() -> void:
 
 func start_looking() -> void:
 	#reset looking_chance
-	look_chance_percentage = LOOK_CHANCE_START_PERCENTAGE
+	look_chance_percentage = LOOK_CHANCE_BASE_PERCENTAGE
 	
 	vis.show_sequence([
 		["turning1", TURNING_TIMEOUT1]
@@ -140,8 +141,6 @@ func _wiggle_or_look() -> void:
 	print("LOOK CHANGE = %s" % look_chance_percentage)
 	
 	if not chance <= look_chance_percentage:
-		print("FAKED")
-		
 		# increase look-chance
 		look_chance_percentage = look_chance_percentage + LOOK_CHANCE_INCREASE_PERCENTAGE
 		
@@ -168,4 +167,12 @@ func _play_random_wiggle_anim() -> void:
 	
 	yield(vis, "sequence_ended")
 
+	idle()
+
+
+func reset() -> void:
+	look_chance_percentage = LOOK_CHANCE_INITIAL_PERCENTAGE
+	timer.stop()
+	rdm.randomize()
+	
 	idle()

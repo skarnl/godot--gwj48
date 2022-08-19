@@ -4,6 +4,7 @@ extends Node2D
 onready var kid := $Kid
 onready var mom := $Mother
 onready var hand := $Hand
+onready var hud := $HUD
 
 enum {
 	IDLE,
@@ -42,14 +43,15 @@ func _input(event: InputEvent) -> void:
 				_update_state(MOONING)
 				
 				if mom_is_looking:
-					yield(get_tree().create_timer(1.0), "timeout")
-					
 					_update_state(BUSTED)
+					
 		MOONING:
 			if event.is_action_released("ui_accept") or (event is InputEventScreenTouch and not event.is_pressed()):
-				
-				
 				_update_state(STOP_MOONING)
+		
+		GAME_OVER:
+			if event.is_pressed():
+				_restart()
 		
 
 func _on_Kid_mooning_stopped() -> void:
@@ -60,7 +62,6 @@ func _on_Mother_looking_started() -> void:
 	mom_is_looking = true
 	
 	if state == MOONING:
-		print("BUSTED")
 		_update_state(BUSTED)
 		return
 	elif state == STOP_MOONING:
@@ -80,29 +81,46 @@ func _on_Mother_looking_stopped() -> void:
 	
 
 func _update_state(new_state: int) -> void:
-	if state != GAME_OVER:
-		state = new_state
+	# guard
+	if state == GAME_OVER and new_state != IDLE:
+		return
 		
-		match state:
-			IDLE:
-				kid.idle()
+	state = new_state
+	
+	match state:
+		IDLE:
+			kid.idle()
+		
+		STOP_MOONING:
+			kid.stop_mooning()
 			
-			STOP_MOONING:
-				kid.stop_mooning()
-				
-			MOONING:
-				kid.start_mooning()
-				
-			BUSTED:
-				kid.busted()
-				mom.busted()
-				
-				yield(mom, "busted_sequence_ended")
-				
-				_update_state(GAME_OVER)
-								
-				
-			GAME_OVER:
-				print("GAME OVER")
-				pass
-				
+		MOONING:
+			kid.start_mooning()
+			
+		BUSTED:
+			kid.busted()
+			mom.busted()
+			
+			yield(mom, "busted_sequence_ended")
+			
+			yield(get_tree().create_timer(2.0), "timeout")
+			
+			_update_state(GAME_OVER)
+			
+		GAME_OVER:
+			hud.show_game_over()
+			# show points
+			
+			# timeout before we can proceed?
+			
+
+func _restart() -> void:
+#	reset points
+#   reset paranoia
+	kid.reset()
+	mom.reset()
+	hud.reset()
+	hand.hide()
+	mom_is_looking = false
+	
+	_update_state(IDLE)

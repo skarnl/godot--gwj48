@@ -35,6 +35,10 @@ window/stretch/aspect="keep"
 cell=false
 color=false
 
+[gui]
+
+theme/custom_font="res://assets/fonts/Mojo.tres"
+
 [importer_defaults]
 
 texture={
