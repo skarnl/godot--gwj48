@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/images/moonr/father--hand.png" type="Texture" id=1]
+[ext_resource path="res://assets/images/moonr/father--head.png" type="Texture" id=2]
+[ext_resource path="res://entities/father.gd" type="Script" id=3]
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("Father--hand:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+
+[sub_resource type="Animation" id=1]
+resource_name = "driving"
+length = 7.0
+loop = true
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("Father--hand:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 3, -0.25, 0, 0.25, 0, -3, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0, -5.5, -0.25, 0, 0.25, 0, 3.2, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.9, 1.9, 2.9, 3.5, 4.7, 5.7, 6.9 )
+}
+
+[node name="Father" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="Father--head" type="Sprite" parent="."]
+position = Vector2( 640, 640 )
+texture = ExtResource( 2 )
+
+[node name="Father--hand" type="Sprite" parent="."]
+position = Vector2( 354, 605 )
+texture = ExtResource( 1 )
+offset = Vector2( 286, 35 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "driving"
+anims/RESET = SubResource( 2 )
+anims/driving = SubResource( 1 )
