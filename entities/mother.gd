@@ -82,10 +82,11 @@ func busted() -> void:
 	
 	vis.show_sequence([
 		["shocked", SHOCKED_TIMEOUT],
-		["angry"]
 	])
 	
 	yield(vis, "sequence_ended")
+	
+	update_state(ANGRY)
 	
 	emit_signal("busted_sequence_ended")
 
@@ -225,5 +226,6 @@ func reset() -> void:
 	timer.stop()
 	rdm.randomize()
 	para_level = 0
+	state = IDLE
 	
 	idle()
