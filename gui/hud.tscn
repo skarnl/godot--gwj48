@@ -27,14 +27,13 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -442.0
-margin_top = -181.0
-margin_right = 594.0
-margin_bottom = -25.0
+margin_left = -606.0
+margin_top = -1240.0
+margin_right = 430.0
+margin_bottom = -1084.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = ExtResource( 1 )
 text = "0"
-align = 2
 script = ExtResource( 3 )
 
 [node name="Explanation" type="Label" parent="HUD"]
@@ -52,6 +51,7 @@ text = "PRESS 'SPACE' TO MOON"
 align = 1
 
 [node name="GameOver" type="ColorRect" parent="HUD"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0.862745, 0.862745, 0.862745, 0.658824 )
