@@ -64,14 +64,16 @@ func update_state(new_state: int) -> void:
 		vis.show_state(STATE_TRANSLATIONS[state])
 
 
-func idle() -> void:
+func idle(after_wiggle: bool = false) -> void:
 	update_state(IDLE)
 	
 	var wait_time = rdm.randf_range(2.7, 5.5) - para_level * 0.5
 	
+	if after_wiggle:
+		wait_time = wait_time - 1.5
+	
 	print("wait time = %f" % wait_time)
 	
-	# TODO dit moet gebaseerd zijn op hoe paranoid ze is
 	timer.start(wait_time)
 
 
@@ -158,7 +160,7 @@ func show_smile() -> void:
 	var previous_frame = "looking"
 	
 	if round(para_level) > 0:
-		previous_frame = "para" + str(round(para_level))
+		previous_frame = "para" + str(clamp(round(para_level), 1, 3))
 	
 	vis.show_sequence([
 		[previous_frame, PARA_LOOK_TIMEOUT],
@@ -168,7 +170,7 @@ func show_smile() -> void:
 	
 	if para_level > 1:
 		para_level = para_level * PARA_DECREASE_RATIO
-		vis.show_state("para" + str(round(para_level)))
+		vis.show_state("para" + str(clamp(round(para_level), 1, 3)))
 		
 		update_state(PARA)
 	else:
@@ -183,7 +185,7 @@ func show_para() -> void:
 	var first_anim = "looking"
 	
 	if para_level > 0:
-		first_anim = "para" + str(ceil(para_level))
+		first_anim = "para" + str(clamp(ceil(para_level), 1, 3))
 		
 	if para_level < 3:
 		para_level = para_level + 1
@@ -201,14 +203,21 @@ func show_para() -> void:
 
 
 func _play_random_wiggle_anim() -> void:
-	# TODO add more animations
+	randomize()
+	
+	var animation = [
+		["turning1", rdm.randf_range(1.7, 2.6)],
+		["look-outside", rdm.randf_range(1.7, 2.6)]
+	]
+	animation.shuffle()
+	
 	vis.show_sequence([
-		["turning1", TURNING_TIMEOUT1]
+		animation[0]
 	])
 	
 	yield(vis, "sequence_ended")
 
-	idle()
+	idle(true)
 
 
 func reset() -> void:

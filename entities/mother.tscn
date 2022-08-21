@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://assets/images/moonr/mother--looking.png" type="Texture" id=1]
 [ext_resource path="res://assets/images/moonr/mother--idle.png" type="Texture" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://assets/images/moonr/mother--smile.png" type="Texture" id=10]
 [ext_resource path="res://assets/images/moonr/mother--para1.png" type="Texture" id=11]
 [ext_resource path="res://entities/visual_container.tscn" type="PackedScene" id=12]
+[ext_resource path="res://assets/images/moonr/mother--look-outside.png" type="Texture" id=13]
 
 [node name="Mother" type="Node2D"]
 script = ExtResource( 5 )
@@ -70,5 +71,10 @@ texture = ExtResource( 9 )
 visible = false
 position = Vector2( 640, 640 )
 texture = ExtResource( 7 )
+
+[node name="Mother--look-outside" type="Sprite" parent="VisualContainer"]
+visible = false
+position = Vector2( 640, 640 )
+texture = ExtResource( 13 )
 
 [editable path="VisualContainer"]
